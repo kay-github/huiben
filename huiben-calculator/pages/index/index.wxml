@@ -1,0 +1,87 @@
+<view class="page-shell">
+  <view class="page-glow page-glow--top"></view>
+  <view class="page-glow page-glow--side"></view>
+
+  <view class="topbar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="topbar__content" style="height: {{navContentHeight}}px;">
+      <view class="brand-mark">
+        <view class="brand-mark__core"></view>
+      </view>
+      <text class="brand-title">回本计算器</text>
+    </view>
+  </view>
+
+  <view class="page-main" style="padding-top: {{headerOffset}}px; padding-bottom: {{pageBottomPadding}}px;">
+    <text class="subtitle">亏损后，需要涨多少才能回本</text>
+
+    <view class="input-panel {{isInputFocused ? 'input-panel--focus' : ''}}">
+      <view class="input-panel__header">
+        <text class="input-label">亏损幅度</text>
+        <text wx:if="{{inputValue}}" class="clear-action" bindtap="handleClear">清空</text>
+      </view>
+
+      <view class="input-field">
+        <input
+          class="input-control"
+          type="digit"
+          value="{{inputValue}}"
+          placeholder="0"
+          placeholder-class="input-placeholder"
+          cursor-spacing="24"
+          maxlength="6"
+          bindinput="handleInput"
+          bindfocus="handleFocus"
+          bindblur="handleBlur"
+          confirm-type="done"
+        />
+        <text class="input-unit">%</text>
+      </view>
+
+      <text wx:if="{{inlineHint}}" class="inline-hint">{{inlineHint}}</text>
+    </view>
+
+    <view class="result-panel">
+      <text class="result-label">回本涨幅</text>
+
+      <view class="result-panel__content">
+        <block wx:if="{{state === 'abnormal'}}">
+          <text class="abnormal-title">无法回本</text>
+          <text class="abnormal-desc">亏损达到 100% 时无法回本</text>
+        </block>
+
+        <block wx:elif="{{state === 'empty'}}">
+          <view class="result-value result-value--placeholder">
+            <text class="result-number result-number--placeholder">--.--</text>
+            <text class="result-unit result-unit--placeholder">%</text>
+          </view>
+        </block>
+
+        <block wx:else>
+          <view class="result-value">
+            <text class="result-number {{resultFontClass}}">{{resultNumber}}</text>
+            <text class="result-unit">{{resultUnit}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <view class="quick-panel">
+      <text class="quick-label">速查</text>
+
+      <view class="quick-grid">
+        <view
+          wx:for="{{quickReferenceList}}"
+          wx:key="loss"
+          class="quick-item {{selectedLoss === item.loss ? 'quick-item--active' : ''}}"
+          data-loss="{{item.loss}}"
+          bindtap="handleQuickSelect"
+        >
+          <text class="quick-loss">跌 {{item.loss}}%</text>
+          <text class="quick-result">{{item.recovery}}</text>
+        </view>
+      </view>
+    </view>
+
+    <text class="footer-note">仅作计算参考，不构成投资建议</text>
+  </view>
+</view>

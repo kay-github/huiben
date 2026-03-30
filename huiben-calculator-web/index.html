@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>回本计算器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <div class="page-glow page-glow--top"></div>
+    <div class="page-glow page-glow--side"></div>
+
+    <header class="topbar">
+      <div class="topbar__content">
+        <div class="brand-mark" aria-hidden="true">
+          <div class="brand-mark__core"></div>
+        </div>
+        <h1 class="brand-title">回本计算器</h1>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <p class="subtitle">亏损后，需要涨多少才能回本</p>
+
+      <section class="input-panel" id="inputPanel" aria-label="亏损幅度输入区">
+        <div class="input-panel__header">
+          <div class="input-label">亏损幅度</div>
+          <button type="button" class="clear-action is-hidden" id="clearAction">清空</button>
+        </div>
+
+        <div class="input-field">
+          <input
+            id="lossInput"
+            class="input-control"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="0"
+            maxlength="6"
+            aria-label="亏损幅度"
+          >
+          <span class="input-unit">%</span>
+        </div>
+
+        <p class="inline-hint is-hidden" id="inlineHint" aria-live="polite"></p>
+      </section>
+
+      <section class="result-panel" aria-label="回本涨幅结果区">
+        <div class="result-label">回本涨幅</div>
+
+        <div class="result-panel__content">
+          <div class="result-value result-value--placeholder" id="resultValue">
+            <span class="result-number result-number--placeholder" id="resultNumber">--.--</span>
+            <span class="result-unit result-unit--placeholder" id="resultUnit">%</span>
+          </div>
+
+          <div class="abnormal-state is-hidden" id="abnormalState">
+            <div class="abnormal-title">无法回本</div>
+            <div class="abnormal-desc">亏损达到 100% 时无法回本</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick-panel" aria-label="速查区">
+        <div class="quick-label">速查</div>
+        <div class="quick-grid" id="quickGrid"></div>
+      </section>
+
+      <p class="footer-note">仅作计算参考，不构成投资建议</p>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

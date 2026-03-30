@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>回本计算器 V3</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00F2FF",
+                        "surface": "#0A0A0A",
+                        "surface-container": "#141414",
+                        "on-surface": "#F2F2F2",
+                        "on-surface-variant": "#8E8E93",
+                        "outline": "#2C2C2E",
+                        "error": "#FF453A",
+                        "warning": "#FF9F0A"
+                    },
+                    fontFamily: {
+                        "body": ["Inter", "system-ui", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "8px",
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #F2F2F2;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        .apple-card {
+            background: rgba(20, 20, 20, 0.6);
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .result-glow {
+            text-shadow: 0 0 15px rgba(0, 242, 255, 0.25);
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .grid-cell {
+            border-right: 0.5px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary/20 selection:text-primary">
+<!-- Header -->
+<header class="h-16 flex items-center justify-center border-b border-white/[0.03] bg-[#050505]/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="account_balance_wallet">account_balance_wallet</span>
+<h1 class="text-lg font-semibold tracking-tight">回本计算器</h1>
+</div>
+</header>
+<main class="max-w-md mx-auto px-6 pt-12 pb-20">
+<!-- Subtitle -->
+<div class="text-center mb-12">
+<p class="text-sm text-on-surface-variant font-medium">亏损后，需要涨多少才能回本</p>
+</div>
+<!-- Input Section -->
+<section class="mb-14">
+<div class="apple-card rounded-2xl p-8 flex flex-col items-center border border-white/[0.05]">
+<label class="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider mb-6">
+                    亏损幅度
+                </label>
+<div class="relative w-full flex items-center justify-center gap-1 group">
+<div class="absolute inset-0 bg-white/[0.02] rounded-lg -m-2 border border-white/[0.05] shadow-inner transition-opacity duration-300 opacity-50 group-hover:opacity-100"></div>
+<input class="relative bg-transparent border-none text-center text-5xl font-semibold text-on-surface focus:ring-0 w-32 p-0 placeholder-white/10" oninput="this.value &gt; 100 ? document.getElementById('result-container').classList.add('text-on-surface-variant') : document.getElementById('result-container').classList.remove('text-on-surface-variant')" placeholder="0" type="number" value="40"/>
+<span class="relative text-2xl font-medium text-on-surface-variant/40 mt-3">%</span>
+</div>
+</div>
+</section>
+<!-- Result Section -->
+<section class="mb-20 text-center">
+<label class="text-[11px] font-semibold text-primary/80 uppercase tracking-[0.2em] mb-4 block">
+                回本涨幅
+            </label>
+<div class="transition-colors duration-500" id="result-container">
+<div class="text-[5.5rem] font-bold tracking-tighter text-primary leading-tight result-glow inline-block">
+                    66.67<span class="text-4xl ml-1 font-semibold opacity-60">%</span>
+</div>
+<!-- Abnormal State Hint (Hidden by default or managed via JS) -->
+<div class="hidden text-2xl font-bold text-on-surface-variant/50 tracking-tight py-12" id="error-state">
+                    无法回本
+                </div>
+</div>
+</section>
+<!-- Quick Reference Grid (18 Slots) -->
+<section class="mb-12">
+<div class="grid grid-cols-3 border-t border-l border-white/[0.03] rounded-sm overflow-hidden">
+<!-- Data Generator Logic for the 18 specific values -->
+<script>
+                    const benchmarks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 50, 70];
+                    const gridContainer = document.currentScript.parentElement;
+                    benchmarks.forEach(val => {
+                        const recover = ((100 / (100 - val)) - 1) * 100;
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-cell p-4 flex flex-col gap-1';
+                        cell.innerHTML = `
+                            <span class="text-[10px] font-medium text-on-surface-variant/50">跌 ${val}%</span>
+                            <span class="text-[13px] font-medium text-on-surface/80">${recover.toFixed(2)}%</span>
+                        `;
+                        gridContainer.appendChild(cell);
+                    });
+                </script>
+</div>
+</section>
+<!-- Footer -->
+<footer class="mt-12 text-center">
+<p class="text-[11px] text-on-surface-variant/40 font-medium">
+                仅作计算参考，不构成投资建议
+            </p>
+</footer>
+</main>
+<!-- Subtle Background Gradient -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top,rgba(0,242,255,0.03)_0%,transparent_50%)]"></div>
+</div>
+<script>
+        // Simple logic for abnormal state
+        const input = document.querySelector('input');
+        const resultValue = document.querySelector('.result-glow');
+        const errorState = document.getElementById('error-state');
+        const resultContainer = document.getElementById('result-container');
+
+        input.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            if (val >= 100) {
+                resultValue.style.display = 'none';
+                errorState.style.display = 'block';
+            } else if (val > 0) {
+                resultValue.style.display = 'inline-block';
+                errorState.style.display = 'none';
+                const res = ((100 / (100 - val)) - 1) * 100;
+                resultValue.innerHTML = `${res.toFixed(2)}<span class="text-4xl ml-1 font-semibold opacity-60">%</span>`;
+            } else {
+                resultValue.innerHTML = `0.00<span class="text-4xl ml-1 font-semibold opacity-60">%</span>`;
+            }
+        });
+    </script>
+</body></html>

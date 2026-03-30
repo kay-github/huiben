@@ -1,0 +1,9 @@
+{
+  "desc": "回本计算器 sitemap",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

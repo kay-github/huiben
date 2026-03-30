@@ -1,0 +1,14 @@
+page {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(0, 242, 255, 0.14), rgba(0, 242, 255, 0) 34%),
+    linear-gradient(180deg, #06080a 0%, #040506 35%, #020304 100%);
+  color: #f4f7fb;
+  font-family: "PingFang SC", "SF Pro Text", "Microsoft YaHei", sans-serif;
+}
+
+view,
+text,
+input {
+  box-sizing: border-box;
+}
